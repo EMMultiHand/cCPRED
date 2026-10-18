@@ -1,6 +1,9 @@
 # Локальные и служебные файлы — не в репозиторий
 certs/
 tools/_dp_pre_pages/
+tools/_pages_body.json
+tools/_chunk_plan.json
+tools/_chunk_paths.tmp
 tools/*.exe
 tools/*.log
 tools/*.err
