@@ -1,0 +1,367 @@
+{
+ "data-pool/app/app.js": {
+  "absolute": 1,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/chrome/borgs/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/chrome/exotic/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/chrome/implants/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/chrome/index.html": {
+  "absolute": 99,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/chrome/pkt_implants/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/chrome/pkt_packs/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/chrome/psycho/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/city/corpos/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/city/index.html": {
+  "absolute": 95,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/city/loot_places/index.html": {
+  "absolute": 91,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/city/nc_map/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/city/ncpd/index.html": {
+  "absolute": 91,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/city/trauma_team/index.html": {
+  "absolute": 93,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/contacts/index.html": {
+  "absolute": 93,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/contacts/night_market/index.html": {
+  "absolute": 106,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/contacts/reputation/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/contacts/streetlang/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/css/footer.css": {
+  "absolute": 1,
+  "base_script": 0,
+  "depth": 1
+ },
+ "data-pool/equipment/acpa/index.html": {
+  "absolute": 97,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/equipment/agents_accessories/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/equipment/armor/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/equipment/clothes_style/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/equipment/index.html": {
+  "absolute": 101,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/equipment/items/index.html": {
+  "absolute": 97,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/equipment/soft/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/equipment/weapons/index.html": {
+  "absolute": 93,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/faq/index.html": {
+  "absolute": 91,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/gm-screen/screen/index.html": {
+  "absolute": 1,
+  "base_script": 0,
+  "depth": 2
+ },
+ "data-pool/gm/ambush/index.html": {
+  "absolute": 86,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/gm/combat/index.html": {
+  "absolute": 86,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/gm/economic/index.html": {
+  "absolute": 86,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/gm/features/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/gm/generators/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/gm/luck/index.html": {
+  "absolute": 86,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/gm/traps/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/health/drugs_medicine/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/health/healing_therapy_implants/index.html": {
+  "absolute": 90,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/health/index.html": {
+  "absolute": 95,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/health/other/index.html": {
+  "absolute": 90,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/health/wounds/index.html": {
+  "absolute": 90,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/home/aparts/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/home/base/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/home/containers/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/home/goods/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/home/index.html": {
+  "absolute": 95,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/index.html": {
+  "absolute": 115,
+  "base_script": 1,
+  "depth": 0
+ },
+ "data-pool/job/cop/index.html": {
+  "absolute": 90,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/fixer/index.html": {
+  "absolute": 90,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/index.html": {
+  "absolute": 107,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/job/media/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/medic/index.html": {
+  "absolute": 92,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/netrunner/index.html": {
+  "absolute": 91,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/nomad/index.html": {
+  "absolute": 90,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/rocker/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/solo/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/suit/index.html": {
+  "absolute": 95,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/job/tech/index.html": {
+  "absolute": 92,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/net/index.html": {
+  "absolute": 93,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/net/netrun/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/net/quick_hacks/index.html": {
+  "absolute": 88,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/net/weather/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/other/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/other/martial_arts/index.html": {
+  "absolute": 90,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/rules/index.html": {
+  "absolute": 124,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/support/index.html": {
+  "absolute": 99,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/thanks/index.html": {
+  "absolute": 95,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/updates/index.html": {
+  "absolute": 95,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/workshop/drones/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/workshop/garage/index.html": {
+  "absolute": 89,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/workshop/index.html": {
+  "absolute": 95,
+  "base_script": 1,
+  "depth": 1
+ },
+ "data-pool/workshop/repair/index.html": {
+  "absolute": 90,
+  "base_script": 1,
+  "depth": 2
+ },
+ "data-pool/workshop/upgrades/index.html": {
+  "absolute": 87,
+  "base_script": 1,
+  "depth": 2
+ }
+}

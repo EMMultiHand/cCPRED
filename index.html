@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyberpunk RED — локальная копия (тёмно-коричневая тема)</title>
+  <link rel="icon" href="app/favicon.png">
+  <style>
+    :root {
+      --bg: #1a110b;
+      --bg-2: #201509;
+      --surface: #251a11;
+      --surface-2: #2f2016;
+      --border: #3e2b1d;
+      --accent: #c68b49;
+      --accent-bright: #e8b87b;
+      --text: #f2e5d0;
+      --muted: #a28a6d;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(1200px 600px at 50% -10%, #2b1d12 0%, var(--bg) 55%, #140d07 100%);
+      color: var(--text);
+      font-family: system-ui, "Segoe UI", Arial, sans-serif;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 48px 20px 60px;
+    }
+
+    header.hero {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--accent-bright);
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4.5vw, 44px);
+      letter-spacing: .02em;
+      color: var(--text);
+    }
+
+    h1 .accent { color: var(--accent); }
+
+    .sub {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 22px;
+      margin-top: 34px;
+    }
+
+    a.card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background: linear-gradient(180deg, var(--surface) 0%, #221710 100%);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 26px 26px 22px;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    a.card::after {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--accent);
+      opacity: .85;
+    }
+
+    a.card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, .5), 0 0 0 1px rgba(198, 139, 73, .25);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 21px;
+      color: var(--accent-bright);
+    }
+
+    .card p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .card .go {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    .chips {
+      margin-top: 26px;
+      padding: 18px 20px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--bg-2);
+    }
+
+    .chips .title {
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent-bright);
+      margin-bottom: 12px;
+    }
+
+    .chips .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chips a {
+      color: #d8c7b2;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 13px;
+      text-decoration: none;
+      transition: background .15s ease, color .15s ease, border-color .15s ease;
+    }
+
+    .chips a:hover {
+      color: var(--bg);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    footer.note {
+      margin-top: 38px;
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    footer.note code {
+      color: var(--accent-bright);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1px 7px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="badge">Тёмно-коричневая тема · локальная копия</div>
+      <h1>CYBERPUNK <span class="accent">RED</span></h1>
+      <p class="sub">
+        Локальная копия листа персонажа <strong>redcharacters.com</strong> в тёмно-коричневой теме
+        с интегрированной базой знаний <strong>ДатаПул</strong> (справочники, снаряжение, противники,
+        ширма мастера и книги правил на русском языке).
+      </p>
+    </header>
+
+    <div class="cards">
+      <a class="card" href="app/">
+        <h2>Лист персонажа</h2>
+        <p>
+          Полная копия приложения «Cyberpunk RED Character App»: создание, редактирование,
+          импорт и экспорт персонажей. Тема оформления — тёмно-коричневая (кофейный фон,
+          медные акценты). Справочник ДатаПула открывается кнопкой «ДатаПул» в правом нижнем углу.
+        </p>
+        <span class="go">Открыть приложение →</span>
+      </a>
+
+      <a class="card" href="data-pool/">
+        <h2>ДатаПул — база знаний</h2>
+        <p>
+          Полная копия справочника по Cyberpunk RED/207x: снаряжение, оружие и броня, импланты,
+          здоровье и травмы, город, сеть, работа, боевые искусства, противники, генераторы,
+          экономика, ширма мастера и книги правил. Переоформлено в тёмно-коричневой теме.
+        </p>
+        <span class="go">Открыть справочник →</span>
+      </a>
+    </div>
+
+    <div class="chips">
+      <div class="title">Быстрый доступ · ДатаПул</div>
+      <div class="row">
+        <a href="data-pool/equipment/">📦 Снаряжение</a>
+        <a href="data-pool/equipment/weapons/">🔫 Оружейный магазин</a>
+        <a href="data-pool/equipment/armor/">🛡 Броня</a>
+        <a href="data-pool/equipment/acpa/">🦾 Силовая броня</a>
+        <a href="data-pool/chrome/implants/">🤖 Киберимпланты</a>
+        <a href="data-pool/health/wounds/">🩸 Травмы</a>
+        <a href="data-pool/health/drugs_medicine/">💊 Наркотики и лекарства</a>
+        <a href="data-pool/city/nc_map/">🗺 Карта Найт-Сити</a>
+        <a href="data-pool/net/quick_hacks/">⚡ Быстрый взлом</a>
+        <a href="data-pool/job/">💼 Роли</a>
+        <a href="data-pool/other/martial_arts/">🥋 Боевые искусства</a>
+        <a href="data-pool/gm/combat/">🎲 Таблицы боя</a>
+        <a href="data-pool/gm/generators/">🎰 Генераторы</a>
+        <a href="data-pool/rules/">📚 Книги правил</a>
+        <a href="data-pool/faq/">❓ FAQ</a>
+      </div>
+    </div>
+
+    <footer class="note">
+      Для работы локальной копии нужен простой веб-сервер (из-за политики браузеров для WebAssembly
+      и загрузки данных). Запустите <code>start.cmd</code> и откройте
+      <code>http://localhost:8000/</code>. Оригиналы: <code>redcharacters.com</code> и
+      <code>alec-leon.github.io/data-pool</code>.
+    </footer>
+  </div>
+</body>
+</html>

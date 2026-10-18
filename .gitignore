@@ -1,0 +1,14 @@
+# Локальные и служебные файлы — не в репозиторий
+certs/
+tools/_dp_pre_pages/
+tools/*.exe
+tools/*.log
+tools/*.err
+*.log
+*.err
+__pycache__/
+*.pyc
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
