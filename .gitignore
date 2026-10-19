@@ -1,5 +1,6 @@
 # Локальные и служебные файлы — не в репозиторий
 certs/
+tools/_*
 tools/_dp_pre_pages/
 tools/_pages_body.json
 tools/_chunk_plan.json
