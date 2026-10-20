@@ -9876,7 +9876,47 @@ o=A.ca(c,!0,t.N)
 p.a=""
 q=A.ih(a,1080,560,0.84)
 s=2
-return A.C(A.cc(a,A.a([A.Y(A.eX(B.DP,new A.aIb(o,f,a),null),1)],t.p),new A.dP(new A.aIc(p,h,o,g,new A.aId(),e,b,f),null),q,null,B.am,640,null,!1,null,d,t.H),$async$aHN)
+return A.C(A.cc(a,A.a([A.Y(A.eX(B.DP,new A.aIb(o,f,a),null),1),B.bO,A.Y(A.fK(A.p("\u0421\u041e\u0417\u0414\u0410\u0422\u042c \u0418\u041c\u041f\u041b\u0410\u041d\u0422",null,null,null,null,null,null,null,null,null),function(){
+var ZC=a,ZZ=h,ZO=o,ZF=f;
+var mkC=function(v){return new A.bv(new A.aV(v,B.a4,B.X),$.aE())};
+var fN=mkC(""),fC=mkC("\u041c\u043e\u0434\u0443\u043b\u044c"),fP=mkC(""),fH=mkC(""),fI=mkC(""),fS=mkC("1"),fE=mkC(""),fD=mkC("");
+var fErr=new A.ci("",$.aE());
+var FB=new A.aH2();
+var body=function(cx,cs){return new A.e3(B.lw,A.DE(A.L(A.a([
+FB.$2("\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435",fN),B.a2,
+A.aa(A.a([A.Y(FB.$2("\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f",fC),1),B.a1,A.Y(FB.$3$keyboardType("\u042f\u0447\u0435\u0439\u043a\u0438",fS,B.c3),1)],t.p),B.q,B.e,B.f,0),B.a2,
+A.aa(A.a([A.Y(FB.$2("\u0426\u0435\u043d\u0430",fP),1),B.a1,A.Y(FB.$2("\u041f\u0427",fH),1)],t.p),B.q,B.e,B.f,0),B.a2,
+FB.$2("\u0423\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0430",fI),B.a2,
+FB.$3$maxLines("\u042d\u0444\u0444\u0435\u043a\u0442",fE,4),B.a2,
+FB.$3$maxLines("\u041e\u043f\u0438\u0441\u0430\u043d\u0438\u0435",fD,3),B.J,
+new A.i9(fErr,new A.aGX(),null,null,t.x_)],t.p),B.ay,null,B.e,B.f),null),null)};
+var doSave=function(){
+var nm=B.c.G(fN.a.a);
+if(nm.length===0){fErr.st("\u0412\u0432\u0435\u0434\u0438 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0438\u043c\u043f\u043b\u0430\u043d\u0442\u0430.");return}
+var key=A.jV(nm),LK="cpref_custom_implants",arr=[],ii;
+try{arr=JSON.parse(window.localStorage.getItem(LK)||"[]")||[]}catch(e){arr=[]}
+var ex=-1;
+for(ii=0;ii<arr.length;ii++){if(arr[ii]&&arr[ii].name===key){ex=ii;break}}
+if(ex<0&&$.aZ8().h(0,key)!=null){fErr.st("\u0418\u043c\u043f\u043b\u0430\u043d\u0442 \u0441 \u0442\u0430\u043a\u0438\u043c \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c \u0443\u0436\u0435 \u0435\u0441\u0442\u044c.");return}
+var sl=A.dK(B.c.G(fS.a.a),null);if(sl==null)sl=1;sl=A.aM(sl,0,99);
+var ef=B.c.G(fE.a.a),dt=B.c.G(fD.a.a),ct=B.c.G(fC.a.a);
+if(sl<=0){if(!B.c.n(ef.toLowerCase(),"\u043d\u0435 \u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 \u0441\u043b\u043e\u0442"))ef=(ef.length!==0?ef+" ":"")+"\u041d\u0435 \u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 \u0441\u043b\u043e\u0442."}
+else{ef=(ef.length!==0?ef+" ":"")+"\u0417\u0430\u043d\u0438\u043c\u0430\u0435\u0442 "+sl+" \u0441\u043b\u043e\u0442\u0430."}
+var pr=B.c.G(fP.a.a),hu=B.c.G(fH.a.a),ins=B.c.G(fI.a.a);
+var sla=[ZZ];
+if(ex>=0){var osl=arr[ex].slots||[];for(var si=0;si<osl.length;si++){if(sla.indexOf(osl[si])<0)sla.push(osl[si])}}
+var rec=A.B(["name",key,"slots",A.a(sla,t.s),"category",ct,"source","\u0421\u0432\u043e\u0439 \u0438\u043c\u043f\u043b\u0430\u043d\u0442","price",pr,"humanityLoss",hu,"install",ins,"effects",ef,"details",dt],t.N,t.z);
+var obj={"name":key,"slots":sla,"category":ct,"source":"\u0421\u0432\u043e\u0439 \u0438\u043c\u043f\u043b\u0430\u043d\u0442","price":pr,"humanityLoss":hu,"install":ins,"effects":ef,"details":dt};
+if(ex>=0){arr[ex]=obj;var al=$.aKX();for(ii=0;ii<al.length;ii++){if(J.f(al[ii].h(0,"name"))===key){al[ii]=rec;break}}}
+else{arr.push(obj);$.aKX().push(rec)}
+$.aZ8().j(0,key,rec);
+try{window.localStorage.setItem(LK,JSON.stringify(arr))}catch(e){}
+if(ZO.indexOf(key)<0)ZO.push(key);ZF.$1(ZO);
+A.bL(ZC,false).bD(null);
+setTimeout(function(){try{A.bL(ZC,false).bD(null)}catch(e){}},260);
+};
+A.cc(ZC,A.a([A.Y(A.eX(B.cV,function(){A.bL(ZC,false).bD(null)},null),1),B.bO,A.Y(A.fK(A.p("\u0421\u041e\u0417\u0414\u0410\u0422\u042c",null,null,null,null,null,null,null,null,null),doSave,null),1)],t.p),new A.dP(body,null),null,null,B.am,640,null,true,null,"\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0438\u043c\u043f\u043b\u0430\u043d\u0442",t.H);
+},null),1)],t.p),new A.dP(new A.aIc(p,h,o,g,new A.aId(),e,b,f),null),q,null,B.am,640,null,!1,null,d,t.H),$async$aHN)
 case 2:return A.x(null,r)}})
 return A.y($async$aHN,r)},
 aJJ(a,b,c,d,e){var s=0,r=A.z(t.H)
@@ -114177,6 +114217,7 @@ return q})
 s($,"bfY","aKX",()=>{var q=t.P
 q=A.b1C(B.b.ce(B.Q2,A.b9q(),q),!0,q)
 q.push(A.B(["name","\u0429\u0435\u043f\u043a\u0430 \u041d\u0430\u0432\u044b\u043a\u0430","slots",A.a(["neural"],t.s),"category","\u0429\u0435\u043f\u043a\u0430","source","Cyberpunk RED","price",u.s,"humanityLoss","7 (2d6)","install","\u043d\u0435\u0442","effects","\u0429\u0435\u043f\u043a\u0430. \u041f\u0440\u0438 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043a\u0435 \u0432 \u0440\u0430\u0437\u044a\u0435\u043c \u0447\u0438\u043f \u0443\u043b\u0443\u0447\u0448\u0430\u0435\u0442 \u043d\u0430\u0432\u044b\u043a, \u0434\u043b\u044f \u043a\u043e\u0442\u043e\u0440\u043e\u0433\u043e \u043e\u043d \u0431\u044b\u043b \u0441\u043e\u0437\u0434\u0430\u043d, \u0443 \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f \u043d\u0430 +3, \u0435\u0441\u043b\u0438 \u0442\u043e\u043b\u044c\u043a\u043e \u043d\u0430\u0432\u044b\u043a \u043f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044f \u043d\u0435 \u0431\u044b\u043b \u0443\u0436\u0435 \u043d\u0430\u0442\u0440\u0435\u043d\u0438\u0440\u043e\u0432\u0430\u043d \u0432\u044b\u0448\u0435 +3.","details","\u0412 \u044d\u0442\u043e\u043c \u0441\u043b\u0443\u0447\u0430\u0435 \u043d\u0438\u0447\u0435\u0433\u043e \u043d\u0435 \u043f\u0440\u043e\u0438\u0441\u0445\u043e\u0434\u0438\u0442. \u0427\u0438\u043f\u044b \u0443\u043c\u0435\u043d\u0438\u0439 \u0434\u043b\u044f \u0441\u043b\u043e\u0436\u043d\u043e\u0441\u0442\u0438 (\u04452) \u0441\u0442\u043e\u044f\u0442 1,000 eb, \u0434\u043b\u044f \u0432\u0441\u0435\u0445 \u043e\u0441\u0442\u0430\u043b\u044c\u043d\u044b\u0445 \u0443\u043c\u0435\u043d\u0438\u0439 - 500 eb. \u0422\u0440\u0435\u0431\u0443\u0435\u0442\u0441\u044f \u0420\u0430\u0437\u044a\u0435\u043c \u0434\u043b\u044f \u0429\u0435\u043f\u043e\u043a.","skillChipBonus",3],t.N,t.z))
+/*CPSIMP1*/try{var IMP=window.localStorage.getItem("cpref_custom_implants");if(IMP){var IMPA=JSON.parse(IMP);if(IMPA&&IMPA.length)for(var IMPI=0;IMPI<IMPA.length;IMPI++){var IMPM=IMPA[IMPI];if(IMPM&&IMPM.name)q.push(A.B(["name",A.r(IMPM.name),"slots",A.a(IMPM.slots||[],t.s),"category",A.r(IMPM.category||""),"source",A.r(IMPM.source||"\u0421\u0432\u043e\u0439 \u0438\u043c\u043f\u043b\u0430\u043d\u0442"),"price",A.r(IMPM.price||""),"humanityLoss",A.r(IMPM.humanityLoss||""),"install",A.r(IMPM.install||""),"effects",A.r(IMPM.effects||""),"details",A.r(IMPM.details||"")],t.N,t.z))}}}catch(IMPE){}/*CPSIMP2*/
 return q})
 s($,"bfZ","aZ8",()=>{var q,p,o,n,m=A.u(t.N,t.P)
 for(q=$.aKX(),p=q.length,o=0;o<q.length;q.length===p||(0,A.E)(q),++o){n=q[o]
