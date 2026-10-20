@@ -9874,12 +9874,59 @@ var $async$aHN=A.A(function(i,j){if(i===1)return A.w(j,r)
 for(;;)switch(s){case 0:p={}
 o=A.ca(c,!0,t.N)
 p.a=""
-q=A.ih(a,1080,560,0.84)
-s=2
-return A.C(A.cc(a,A.a([A.Y(A.eX(B.DP,new A.aIb(o,f,a),null),1),B.bO,A.Y(A.fK(A.p("\u0421\u041e\u0417\u0414\u0410\u0422\u042c \u0418\u041c\u041f\u041b\u0410\u041d\u0422",null,null,null,null,null,null,null,null,null),function(){
-var ZC=a,ZZ=h,ZO=o,ZF=f;
+/*CPSDEF1*/
+var LK="cpref_custom_implants";
+var ZONES=["neural","optics","audio","leftArm","rightArm","torso","legs","head","fashion"];
+var CB=function(fn){try{fn.$0=fn;fn.$S=0}catch(e){}return fn};
+var sv=function(rec,k,d){try{if(rec){var v=rec.h(0,k);if(v!=null)return J.f(v)}}catch(e){}return d};
+var stripSlot=function(s){
+s=s||"";
+var low=s.toLowerCase(),p=low.lastIndexOf("\u043d\u0435 \u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 \u0441\u043b\u043e\u0442");
+if(p>=0)return s.slice(0,p).replace(/\s+$/,"");
+p=low.lastIndexOf("\u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 ");
+if(p>=0&&low.slice(p).indexOf("\u0441\u043b\u043e\u0442")>=0)return s.slice(0,p).replace(/\s+$/,"");
+return s};
+var cellsFrom=function(s){
+s=s||"";
+if(s.toLowerCase().indexOf("\u043d\u0435 \u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 \u0441\u043b\u043e\u0442")>=0)return "0";
+var re=/(\d+)\s+\u0441\u043b\u043e\u0442/ig,m=null,r;
+while((r=re.exec(s))!=null)m=r;
+return m?m[1]:"1"};
+var saveZones=function(cb,oldKey,newKey){
+try{
+var model=cb?cb.a:null;
+if(!model||!model.gdf)return;
+var cw=model.gdf();
+for(var zi=0;zi<ZONES.length;zi++){
+var zm=cw.h(0,ZONES[zi]);
+if(!zm)continue;
+var names=A.aET(zm),ch=false,nl=[],ni;
+for(ni=0;ni<names.length;ni++){
+if(names[ni]===oldKey){ch=true;if(newKey!==null)nl.push(newKey)}
+else nl.push(names[ni]);
+}
+if(ch)model.z3(ZONES[zi],A.a(nl,t.s));
+}
+}catch(e){}
+};
+var rmName=function(list,key){
+try{if(!list)return;for(var i=list.length-1;i>=0;i--){if(list[i]===key)list.splice(i,1)}}catch(e){}
+};
+var rmRec=function(list,key){
+try{if(!list)return;for(var i=list.length-1;i>=0;i--){var r=list[i];if(r&&J.f(r.h(0,"name"))===key)list.splice(i,1)}}catch(e){}
+};
 var mkC=function(v){return new A.bv(new A.aV(v,B.a4,B.X),$.aE())};
-var fN=mkC(""),fC=mkC("\u041c\u043e\u0434\u0443\u043b\u044c"),fP=mkC(""),fH=mkC(""),fI=mkC(""),fS=mkC("1"),fE=mkC(""),fD=mkC("");
+window.__cprefImplantEditor=function(EC,rec,EZ,EO,EF,EB){
+var oldName=sv(rec,"name","");
+var oldEff=sv(rec,"effects","");
+var fN=mkC(oldName);
+var fC=mkC(sv(rec,"category","\u041c\u043e\u0434\u0443\u043b\u044c")||"\u041c\u043e\u0434\u0443\u043b\u044c");
+var fP=mkC(sv(rec,"price",""));
+var fH=mkC(sv(rec,"humanityLoss",""));
+var fI=mkC(sv(rec,"install",""));
+var fS=mkC(rec?cellsFrom(oldEff):"1");
+var fE=mkC(rec?stripSlot(oldEff):"");
+var fD=mkC(sv(rec,"details",""));
 var fErr=new A.ci("",$.aE());
 var FB=new A.aH2();
 var body=function(cx,cs){return new A.e3(B.lw,A.DE(A.L(A.a([
@@ -9893,29 +9940,92 @@ new A.i9(fErr,new A.aGX(),null,null,t.x_)],t.p),B.ay,null,B.e,B.f),null),null)};
 var doSave=function(){
 var nm=B.c.G(fN.a.a);
 if(nm.length===0){fErr.st("\u0412\u0432\u0435\u0434\u0438 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435 \u0438\u043c\u043f\u043b\u0430\u043d\u0442\u0430.");return}
-var key=A.jV(nm),LK="cpref_custom_implants",arr=[],ii;
+var key=A.jV(nm),arr=[],ii;
 try{arr=JSON.parse(window.localStorage.getItem(LK)||"[]")||[]}catch(e){arr=[]}
+var editing=!!rec;
+if(editing&&key!==oldName&&$.aZ8().h(0,key)!=null){fErr.st("\u0418\u043c\u043f\u043b\u0430\u043d\u0442 \u0441 \u0442\u0430\u043a\u0438\u043c \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c \u0443\u0436\u0435 \u0435\u0441\u0442\u044c.");return}
 var ex=-1;
+if(!editing){
 for(ii=0;ii<arr.length;ii++){if(arr[ii]&&arr[ii].name===key){ex=ii;break}}
 if(ex<0&&$.aZ8().h(0,key)!=null){fErr.st("\u0418\u043c\u043f\u043b\u0430\u043d\u0442 \u0441 \u0442\u0430\u043a\u0438\u043c \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c \u0443\u0436\u0435 \u0435\u0441\u0442\u044c.");return}
+}
 var sl=A.dK(B.c.G(fS.a.a),null);if(sl==null)sl=1;sl=A.aM(sl,0,99);
 var ef=B.c.G(fE.a.a),dt=B.c.G(fD.a.a),ct=B.c.G(fC.a.a);
 if(sl<=0){if(!B.c.n(ef.toLowerCase(),"\u043d\u0435 \u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 \u0441\u043b\u043e\u0442"))ef=(ef.length!==0?ef+" ":"")+"\u041d\u0435 \u0437\u0430\u043d\u0438\u043c\u0430\u0435\u0442 \u0441\u043b\u043e\u0442."}
 else{ef=(ef.length!==0?ef+" ":"")+"\u0417\u0430\u043d\u0438\u043c\u0430\u0435\u0442 "+sl+" \u0441\u043b\u043e\u0442\u0430."}
 var pr=B.c.G(fP.a.a),hu=B.c.G(fH.a.a),ins=B.c.G(fI.a.a);
-var sla=[ZZ];
-if(ex>=0){var osl=arr[ex].slots||[];for(var si=0;si<osl.length;si++){if(sla.indexOf(osl[si])<0)sla.push(osl[si])}}
-var rec=A.B(["name",key,"slots",A.a(sla,t.s),"category",ct,"source","\u0421\u0432\u043e\u0439 \u0438\u043c\u043f\u043b\u0430\u043d\u0442","price",pr,"humanityLoss",hu,"install",ins,"effects",ef,"details",dt],t.N,t.z);
-var obj={"name":key,"slots":sla,"category":ct,"source":"\u0421\u0432\u043e\u0439 \u0438\u043c\u043f\u043b\u0430\u043d\u0442","price":pr,"humanityLoss":hu,"install":ins,"effects":ef,"details":dt};
-if(ex>=0){arr[ex]=obj;var al=$.aKX();for(ii=0;ii<al.length;ii++){if(J.f(al[ii].h(0,"name"))===key){al[ii]=rec;break}}}
-else{arr.push(obj);$.aKX().push(rec)}
-$.aZ8().j(0,key,rec);
+var sla=[];
+if(editing){
+var osl=rec.h(0,"slots");
+if(osl!=null){for(ii=0;ii<osl.length;ii++)sla.push(osl[ii])}
+}else{
+sla.push(EZ);
+if(ex>=0){var osl2=arr[ex].slots||[];for(ii=0;ii<osl2.length;ii++){if(sla.indexOf(osl2[ii])<0)sla.push(osl2[ii])}}
+}
+var rec2=A.B(["name",key,"slots",A.a(sla,t.s),"category",ct,"source","\u0421\u0432\u043e\u0439 \u0438\u043c\u043f\u043b\u0430\u043d\u0442","price",pr,"humanityLoss",hu,"install",ins,"effects",ef,"details",dt],t.N,t.z);
+var obj2={"name":key,"slots":sla,"category":ct,"source":"\u0421\u0432\u043e\u0439 \u0438\u043c\u043f\u043b\u0430\u043d\u0442","price":pr,"humanityLoss":hu,"install":ins,"effects":ef,"details":dt};
+if(editing){
+var arr2=[],jj,found=false;
+for(jj=0;jj<arr.length;jj++){if(arr[jj]&&arr[jj].name===oldName){arr2.push(obj2);found=true}else arr2.push(arr[jj])}
+if(!found)arr2.push(obj2);
+try{window.localStorage.setItem(LK,JSON.stringify(arr2))}catch(e){}
+var al=$.aKX(),rep=false;
+for(jj=0;jj<al.length;jj++){if(J.f(al[jj].h(0,"name"))===oldName){al[jj]=rec2;rep=true;break}}
+if(!rep)al.push(rec2);
+try{$.aZ8().H(0,oldName)}catch(e){}
+try{$.aZ8().j(0,key,rec2)}catch(e){}
+if(key!==oldName){
+for(jj=0;jj<EO.length;jj++){if(EO[jj]===oldName)EO[jj]=key}
+saveZones(EF,oldName,key);
+try{EF.$1(EO)}catch(e){}
+}
+A.bL(EC,false).bD(null);
+setTimeout(function(){try{A.bL(EC,false).bD(null)}catch(e){}},260);
+return;
+}
+if(ex>=0){arr[ex]=obj2;var al2=$.aKX();for(ii=0;ii<al2.length;ii++){if(J.f(al2[ii].h(0,"name"))===key){al2[ii]=rec2;break}}}
+else{arr.push(obj2);$.aKX().push(rec2)}
+try{$.aZ8().j(0,key,rec2)}catch(e){}
 try{window.localStorage.setItem(LK,JSON.stringify(arr))}catch(e){}
-if(ZO.indexOf(key)<0)ZO.push(key);ZF.$1(ZO);
-A.bL(ZC,false).bD(null);
-setTimeout(function(){try{A.bL(ZC,false).bD(null)}catch(e){}},260);
+var why=A.aVD(EZ,EO,key,EB);
+if(why.length===0&&!A.b9h(EZ,EO,key,EB))why="\u041d\u0435\u0434\u043e\u0441\u0442\u0430\u0442\u043e\u0447\u043d\u043e \u0441\u0432\u043e\u0431\u043e\u0434\u043d\u044b\u0445 \u044f\u0447\u0435\u0435\u043a. \u0421\u043d\u0430\u0447\u0430\u043b\u0430 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u0438 \u0431\u0430\u0437\u043e\u0432\u0443\u044e \u0441\u0438\u0441\u0442\u0435\u043c\u0443 \u0438\u043b\u0438 \u043e\u0441\u0432\u043e\u0431\u043e\u0434\u0438 \u0441\u043b\u043e\u0442.";
+if(why.length!==0){fErr.st("\u0418\u043c\u043f\u043b\u0430\u043d\u0442 \u0441\u043e\u0445\u0440\u0430\u043d\u0451\u043d \u0432 \u043a\u0430\u0442\u0430\u043b\u043e\u0433, \u043d\u043e \u043d\u0435 \u0443\u0441\u0442\u0430\u043d\u043e\u0432\u043b\u0435\u043d: "+why);return}
+if(EO.indexOf(key)<0)EO.push(key);
+EF.$1(EO);
+A.bL(EC,false).bD(null);
+setTimeout(function(){try{A.bL(EC,false).bD(null)}catch(e){}},260);
 };
-A.cc(ZC,A.a([A.Y(A.eX(B.cV,function(){A.bL(ZC,false).bD(null)},null),1),B.bO,A.Y(A.fK(A.p("\u0421\u041e\u0417\u0414\u0410\u0422\u042c",null,null,null,null,null,null,null,null,null),doSave,null),1)],t.p),new A.dP(body,null),null,null,B.am,640,null,true,null,"\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0438\u043c\u043f\u043b\u0430\u043d\u0442",t.H);
+A.cc(EC,A.a([A.Y(A.eX(B.cV,function(){A.bL(EC,false).bD(null)},null),1),B.bO,A.Y(A.fK(A.p(rec?"\u0421\u041e\u0425\u0420\u0410\u041d\u0418\u0422\u042c":"\u0421\u041e\u0417\u0414\u0410\u0422\u042c",null,null,null,null,null,null,null,null,null),doSave,null),1)],t.p),new A.dP(body,null),null,null,B.am,640,null,true,null,rec?"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0430 \u0438\u043c\u043f\u043b\u0430\u043d\u0442\u0430":"\u0421\u043e\u0437\u0434\u0430\u0442\u044c \u0438\u043c\u043f\u043b\u0430\u043d\u0442",t.H);
+};
+window.__cprefImplantSettings=function(SC,rec,SZ,SO,SF,SB,SCAT){
+var key=sv(rec,"name","");
+var mkRow=function(icon,title,isD,cb){
+var o=$.e,n=o?B.x:B.h,m=o?B.j:B.i,s,q;
+if(isD){if($.k)s=B.p;else s=o?B.o:B.n}else s=o?B.Q:B.S;
+if(isD)q=$.k?B.D:B.h;else if($.k)q=B.p;else q=o?B.o:B.n;
+var rr=A.am(o?B.j:B.i,2);
+var ic=A.P(B.I,A.b6(icon,q,null,20),B.k,null,null,new A.ab(s,null,rr,null,null,null,B.y),null,34,null,null,null,null,34);
+return A.cl(B.a9,A.bx(null,m,2,true,A.aa(A.a([ic,B.a1,A.Y(A.p(title.toUpperCase(),null,null,null,null,null,A.o(null,null,o?B.j:B.i,null,null,null,null,null,null,null,null,12,null,null,B.m,null,null,true,null,0.8,null,null,null,null,null,null),null,null,null),1)],t.p),B.r,B.e,B.f,0),n,null,null,null,B.aF,1/0),B.a7,false,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,CB(cb),null,null,null,null,null,null,false,B.aq);
+};
+var doDelete=function(){
+try{var arr=JSON.parse(window.localStorage.getItem(LK)||"[]")||[],nw=[],ii;for(ii=0;ii<arr.length;ii++){if(!arr[ii]||arr[ii].name!==key)nw.push(arr[ii])}window.localStorage.setItem(LK,JSON.stringify(nw))}catch(e){}
+try{$.aZ8().H(0,key)}catch(e){}
+try{var al=$.aKX();for(var i2=al.length-1;i2>=0;i2--){if(J.f(al[i2].h(0,"name"))===key)al.splice(i2,1)}}catch(e){}
+rmName(SO,key);rmRec(SCAT,key);
+saveZones(SF,key,null);
+try{SF.$1(SO)}catch(e){}
+};
+A.cc(SC,null,A.L(A.a([
+mkRow(B.jG,"\u0420\u0435\u0434\u0430\u043a\u0442\u0438\u0440\u043e\u0432\u0430\u0442\u044c",false,function(){A.bL(SC,false).bD(null);setTimeout(function(){try{window.__cprefImplantEditor(SC,rec,SZ,SO,SF,SB)}catch(e){}},260)}),
+B.L,
+mkRow(B.ek,"\u0423\u0434\u0430\u043b\u0438\u0442\u044c",true,function(){A.bL(SC,false).bD(null);setTimeout(function(){try{doDelete()}catch(e){}try{A.bL(SC,false).bD(null)}catch(e){}},260)})
+],t.p),B.r,null,B.e,B.ai),null,null,B.am,640,null,true,null,"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0438\u043c\u043f\u043b\u0430\u043d\u0442\u0430",t.H);
+};
+/*CPSDEF2*/
+q=A.ih(a,1080,560,0.84)
+s=2
+return A.C(A.cc(a,A.a([A.Y(A.eX(B.DP,new A.aIb(o,f,a),null),1),B.bO,A.Y(A.fK(A.p("\u0421\u041e\u0417\u0414\u0410\u0422\u042c \u0418\u041c\u041f\u041b\u0410\u041d\u0422",null,null,null,null,null,null,null,null,null),function(){
+try{window.__cprefImplantEditor(a,h,o,f,b)}catch(e0){}
 },null),1)],t.p),new A.dP(new A.aIc(p,h,o,g,new A.aId(),e,b,f),null),q,null,B.am,640,null,!1,null,d,t.H),$async$aHN)
 case 2:return A.x(null,r)}})
 return A.y($async$aHN,r)},
@@ -49858,7 +49968,18 @@ if(h){if($.k)n=B.v
 else n=$.e?B.t:B.u
 B.b.F(b4,A.a([B.L,A.p(b,2,B.B,b2,b2,b2,A.o(b2,b2,n,b2,b2,b2,b2,b2,b2,b2,b2,10,b2,b2,B.a8,b2,1.25,!0,b2,b2,b2,b2,b2,b2,b2,b2),b2,b2,b2)],a7))}if(d.length!==0)B.b.F(b4,A.a([B.L,A.p(d,3,B.B,b2,b2,b2,A.o(b2,b2,f,b2,b2,b2,b2,b2,$.k?"Jura":"Rubik",b2,b2,10,b2,b2,B.V,b2,1.25,!0,b2,b2,b2,b2,b2,b2,b2,b2),b2,b2,b2)],a7))
 if(c.length!==0&&c!==d)B.b.F(b4,A.a([B.aw,A.p(c,3,B.B,b2,b2,b2,A.o(b2,b2,f,b2,b2,b2,b2,b2,$.k?"Jura":"Rubik",b2,b2,10,b2,b2,B.V,b2,1.25,!0,b2,b2,b2,b2,b2,b2,b2,b2),b2,b2,b2)],a7))
-return A.bg(!1,b2,!0,A.P(b2,A.L(b4,B.q,b2,B.e,B.f),B.k,b2,b2,new A.ab(a4,b2,a5,b2,b2,b2,B.y),b2,b2,b2,B.aF,b2,b2,b2),b2,!0,b2,b2,b2,b2,b2,b2,b2,a3,b2,b2,b2,b2)},
+/*CPSIMP3*/try{var gsrc="";try{var gs0=b3.h(0,"source");if(gs0!=null)gsrc=J.f(gs0)}catch(eG0){}
+if(gsrc==="\u0421\u0432\u043e\u0439 \u0438\u043c\u043f\u043b\u0430\u043d\u0442"){
+var gg=$.e,ggbg,ggfg;
+if(q)ggbg=gg?B.x:B.h;else ggbg=gg?B.Q:B.S;
+if($.k)ggfg=B.p;else ggfg=gg?B.o:B.n;
+var ggr=A.am(gg?B.j:B.i,2);
+var ggTap=function(){try{window.__cprefImplantSettings(b6,b3,b1.d,b1.b,b1.f,b1.e,b1.a)}catch(eG){}};
+ggTap.$0=ggTap;ggTap.$S=0;
+var ggA=A.cl(B.a9,A.P(B.I,A.b6(B.jI,ggfg,b2,19),B.k,b2,b2,new A.ab(ggbg,b2,ggr,b2,b2,b2,B.y),b2,34,b2,b2,b2,b2,34),B.a7,false,b2,b2,b2,b2,b2,b2,b2,b2,b2,b2,b2,b2,b2,b2,b2,b2,b2,ggTap,b2,b2,b2,b2,b2,b2,false,B.aq);
+b4.push(B.L);
+b4.push(new A.dG(B.p4,b2,b2,A.md(ggA,"\u041d\u0430\u0441\u0442\u0440\u043e\u0439\u043a\u0438 \u0438\u043c\u043f\u043b\u0430\u043d\u0442\u0430"),b2));
+}}catch(eGear){}/*CPSIMP4*/return A.bg(!1,b2,!0,A.P(b2,A.L(b4,B.q,b2,B.e,B.f),B.k,b2,b2,new A.ab(a4,b2,a5,b2,b2,b2,B.y),b2,b2,b2,B.aF,b2,b2,b2),b2,!0,b2,b2,b2,b2,b2,b2,b2,a3,b2,b2,b2,b2)},
 $S:66}
 A.aHQ.prototype={
 $1(a){return!this.a.n(0,a)},
