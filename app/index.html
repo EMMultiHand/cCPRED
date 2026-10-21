@@ -275,96 +275,25 @@
       color: inherit;
     }
 
-    /* ---- Dark-brown additions: Data Pool integration ---- */
+    /* ---- Dark-brown additions: Data Pool inline agent section ---- */
     #dp-panel {
       position: fixed;
-      inset: 0 0 0 auto;
-      width: min(760px, 96vw);
       z-index: 9001;
       display: flex;
       flex-direction: column;
+      overflow: hidden;
       background: #1a110b;
-      border-left: 2px solid #c68b49;
-      box-shadow: -12px 0 40px rgba(0, 0, 0, .6);
     }
 
     #dp-panel.hidden {
       display: none;
     }
 
-    #dp-panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 10px 14px;
-      background: #251a11;
-      border-bottom: 1px solid #3e2b1d;
-      color: #f2e5d0;
-      font: 600 14px/1.3 system-ui, Arial, sans-serif;
-    }
-
-    #dp-panel-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    #dp-panel-actions a {
-      color: #e8b87b;
-      font: 600 12px/1 system-ui, Arial, sans-serif;
-      text-decoration: none;
-      white-space: nowrap;
-    }
-
-    #dp-panel-actions a:hover {
-      color: #f2e5d0;
-    }
-
-    #dp-panel-close {
-      background: transparent;
-      color: #c68b49;
-      border: 1px solid #3e2b1d;
-      border-radius: 6px;
-      width: 30px;
-      height: 28px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    #dp-panel-close:hover {
-      color: #f2e5d0;
-      border-color: #c68b49;
-    }
-
-    #dp-panel-quick {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      padding: 8px 12px;
-      background: #201509;
-      border-bottom: 1px solid #3e2b1d;
-    }
-
-    #dp-panel-quick a {
-      color: #d8c7b2;
-      background: #2f2016;
-      border: 1px solid #3e2b1d;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font: 600 12px/1.2 system-ui, Arial, sans-serif;
-      text-decoration: none;
-    }
-
-    #dp-panel-quick a:hover {
-      color: #1a110b;
-      background: #c68b49;
-      border-color: #c68b49;
-    }
-
     #dp-frame {
       flex: 1;
       width: 100%;
+      height: 100%;
+      display: block;
       border: 0;
       background: #1a110b;
     }
@@ -381,29 +310,6 @@
     </div>
   </div>
   <div id="dp-panel" class="hidden" aria-hidden="true">
-    <div id="dp-panel-head">
-      <div id="dp-panel-title">ДатаПул — база знаний Cyberpunk RED</div>
-      <div id="dp-panel-actions">
-        <a id="dp-panel-external" href="../data-pool/" target="_blank" rel="noopener">Открыть в новой вкладке ↗</a>
-        <button id="dp-panel-close" title="Закрыть" aria-label="Закрыть">✕</button>
-      </div>
-    </div>
-    <div id="dp-panel-quick">
-      <a href="#" data-dp="../data-pool/equipment/">Снаряжение</a>
-      <a href="#" data-dp="../data-pool/equipment/weapons/">Оружие</a>
-      <a href="#" data-dp="../data-pool/equipment/armor/">Броня</a>
-      <a href="#" data-dp="../data-pool/equipment/acpa/">Силовая броня</a>
-      <a href="#" data-dp="../data-pool/chrome/implants/">Импланты</a>
-      <a href="#" data-dp="../data-pool/health/drugs_medicine/">Наркотики</a>
-      <a href="#" data-dp="../data-pool/health/wounds/">Травмы</a>
-      <a href="#" data-dp="../data-pool/job/">Роли</a>
-      <a href="#" data-dp="../data-pool/net/quick_hacks/">Взломы</a>
-      <a href="#" data-dp="../data-pool/other/martial_arts/">Боевые искусства</a>
-      <a href="#" data-dp="../data-pool/" data-dp-tab="enemies">Противники</a>
-      <a href="#" data-dp="../data-pool/" data-dp-tab="gm-screen">Ширма Мастера</a>
-      <a href="#" data-dp="../data-pool/rules/">Книги правил</a>
-      <a href="#" data-dp="../data-pool/faq/">FAQ</a>
-    </div>
     <iframe id="dp-frame" title="ДатаПул" loading="lazy"></iframe>
   </div>
   <script>
@@ -720,53 +626,260 @@
   -->
   <script>
     (function () {
+      'use strict';
       var panel = document.getElementById('dp-panel');
       var frame = document.getElementById('dp-frame');
-      var closeBtn = document.getElementById('dp-panel-close');
-      var initialized = false;
+      if (!panel || !frame) return;
 
-      function activateTab(tab) {
-        if (!tab) return false;
-        try {
-          var doc = frame.contentDocument;
-          var el = doc && doc.getElementById(tab);
-          if (el) { el.click(); return true; }
-        } catch (error) {}
+      var DP_SECTION = 'Датапул';
+      var AGENT_PAGE = 'Заметки';
+      var NAV_HEIGHT = 86;
+
+      var state = { section: '', page: '', closed: false };
+      var visible = false;
+      var frameRequested = false;
+      var lastKey = '';
+      var pollTimer = 0;
+      var syncTimer = 0;
+      var semObserver = null;
+      var semClickAt = 0;
+
+      function semReady() {
+        return document.querySelectorAll('flt-semantics').length > 0;
+      }
+
+      // Flutter web exposes its semantics tree only after the accessibility
+      // placeholder is activated.  Enabling it lazily (on the first DataPool
+      // open) lets us read exact widget rects without affecting normal use.
+      function requestSemantics() {
+        if (semReady()) return true;
+        var now = Date.now();
+        if (now - semClickAt > 1200) {
+          semClickAt = now;
+          try {
+            var placeholder = document.querySelector('flt-semantics-placeholder');
+            if (placeholder) placeholder.click();
+          } catch (error) {}
+        }
         return false;
       }
 
-      function openPanel(url, tab) {
-        panel.classList.remove('hidden');
-        panel.setAttribute('aria-hidden', 'false');
-        var target = url || '../data-pool/';
-        if (frame.getAttribute('src') !== target) {
-          frame.onload = function () { activateTab(tab); };
-          frame.setAttribute('src', target);
-        } else if (!activateTab(tab)) {
-          // Ифрейм ещё грузится — повторим попытку на onload.
-          frame.onload = function () { activateTab(tab); };
+      function findButton(label) {
+        var nodes = document.querySelectorAll('flt-semantics[role="button"]');
+        for (var i = 0; i < nodes.length; i += 1) {
+          var el = nodes[i];
+          if ((el.textContent || '').trim() !== label) continue;
+          var rect = el.getBoundingClientRect();
+          if (rect.width > 0 && rect.height > 0) {
+            return { el: el, rect: rect };
+          }
         }
-        initialized = true;
+        return null;
       }
 
-      function closePanel() {
-        if (!initialized) return;
+      function hasModal() {
+        return !!document.querySelector(
+          'flt-semantics[role="dialog"], flt-semantics[aria-modal="true"]'
+        );
+      }
+
+      function measureFromSemantics() {
+        if (!semReady() || hasModal()) return null;
+        var tile = findButton('ДАТАПУЛ');
+        var title = findButton('Агент');
+        if (!tile || !title) return null;
+
+        // The outermost semantics group around the tiles is the scrollable
+        // page viewport; its bottom edge is the bottom of the content area.
+        var appBottom = window.innerHeight;
+        var node = tile.el.parentElement;
+        while (node) {
+          if (node.tagName === 'FLT-SEMANTICS' && node.getAttribute('role') === 'group') {
+            var group = node.getBoundingClientRect();
+            var fullScreen = group.width >= window.innerWidth - 1 &&
+                             group.height >= window.innerHeight - 1;
+            if (!fullScreen && group.width > 0 && group.height > 0) {
+              appBottom = group.bottom;
+            }
+          }
+          node = node.parentElement;
+        }
+
+        var top = tile.rect.bottom + 12;
+        var left = title.rect.left;
+        var width = title.rect.width;
+        var bottom = Math.min(appBottom, window.innerHeight);
+        if (top < 0) top = 0;
+        if (width < 80 || bottom - top < 24) return null;
+        return { left: left, top: top, width: width, height: bottom - top };
+      }
+
+      // Geometric fallback used for the first frames before the semantics
+      // tree is available.  Mirrors the compiled Flutter layout.
+      function fallbackRect() {
+        var width = window.innerWidth;
+        var height = window.innerHeight;
+        var wide = width >= 600;
+        var left = wide ? 126 : 12;
+        var contentWidth = width - (wide ? 138 : 24);
+        var gridTop = wide ? 125 : 177;
+        var gridHeight;
+
+        if (width > height) {
+          var tileSize = height < 430 ? 92 : 112;
+          gridHeight = Math.min(tileSize, contentWidth / 7);
+        } else {
+          var gridWidth = Math.min(contentWidth, 960);
+          var columns = gridWidth < 520
+            ? 3
+            : Math.max(3, Math.min(6, Math.floor((gridWidth + 6) / 150)));
+          var extent = gridWidth < 520 ? 94 : 82;
+          var rows = Math.ceil(7 / columns);
+          gridHeight = rows * extent + (rows - 1) * 6;
+        }
+
+        var top = gridTop + gridHeight + 12;
+        var bottom = wide ? height : height - NAV_HEIGHT;
+        if (contentWidth < 80 || bottom - top < 24) return null;
+        return { left: left, top: top, width: contentWidth, height: bottom - top };
+      }
+
+      function isWanted() {
+        return !state.closed && state.section === DP_SECTION && state.page === AGENT_PAGE;
+      }
+
+      function hidePanel() {
+        if (!visible) return;
         panel.classList.add('hidden');
         panel.setAttribute('aria-hidden', 'true');
+        visible = false;
       }
 
-      window.__cprefOpenDataPool = function () { openPanel(); };
-      window.__cprefCloseDataPool = closePanel;
-      closeBtn.addEventListener('click', closePanel);
-      panel.querySelectorAll('[data-dp]').forEach(function (link) {
-        link.addEventListener('click', function (ev) {
-          ev.preventDefault();
-          openPanel(link.getAttribute('data-dp'), link.getAttribute('data-dp-tab'));
+      function applyRect(rect) {
+        if (!rect) {
+          hidePanel();
+          return;
+        }
+        var key = Math.round(rect.left) + ',' + Math.round(rect.top) + ',' +
+                  Math.round(rect.width) + ',' + Math.round(rect.height);
+        if (key !== lastKey) {
+          lastKey = key;
+          panel.style.left = Math.round(rect.left) + 'px';
+          panel.style.top = Math.round(rect.top) + 'px';
+          panel.style.width = Math.round(rect.width) + 'px';
+          panel.style.height = Math.round(rect.height) + 'px';
+        }
+        if (!frameRequested) {
+          frameRequested = true;
+          frame.setAttribute('src', '../data-pool/');
+        }
+        if (!visible) {
+          panel.classList.remove('hidden');
+          panel.setAttribute('aria-hidden', 'false');
+          visible = true;
+        }
+        startPoll();
+      }
+
+      function startPoll() {
+        if (pollTimer) return;
+        pollTimer = window.setInterval(function () {
+          if (!isWanted()) {
+            stopPoll();
+            hidePanel();
+            return;
+          }
+          sync();
+        }, 400);
+      }
+
+      function stopPoll() {
+        if (pollTimer) {
+          window.clearInterval(pollTimer);
+          pollTimer = 0;
+        }
+      }
+
+      function sync() {
+        if (!isWanted()) {
+          stopPoll();
+          hidePanel();
+          return;
+        }
+        requestSemantics();
+        watchSemantics();
+        // Dialogs are drawn on the Flutter canvas, so hide the HTML iframe
+        // while a modal route is open and bring it back afterwards.
+        if (hasModal()) {
+          hidePanel();
+          startPoll();
+          return;
+        }
+        applyRect(measureFromSemantics() || fallbackRect());
+      }
+
+      function scheduleSync() {
+        if (syncTimer) return;
+        syncTimer = window.setTimeout(function () {
+          syncTimer = 0;
+          sync();
+        }, 60);
+      }
+
+      function watchSemantics() {
+        if (semObserver) return;
+        var host = document.querySelector('flt-semantics-host');
+        if (!host) return;
+        semObserver = new MutationObserver(function () {
+          if (isWanted()) scheduleSync();
         });
-      });
-      document.addEventListener('keydown', function (ev) {
-        if (ev.key === 'Escape') { closePanel(); }
-      });
+        semObserver.observe(host, { childList: true, subtree: true });
+      }
+
+      // Hooks called from the patched Flutter bundle (app/main.dart.js).
+      window.__cprefDPSection = function (name) {
+        state.closed = false;
+        state.section = name || '';
+        scheduleSync();
+      };
+      window.__cprefDPState = function (name) {
+        // Do not clear `closed` here: this is a passive rebuild report, and a
+        // rebuild can still happen during the sheet's pop animation.
+        state.section = name || '';
+        state.page = AGENT_PAGE;
+        scheduleSync();
+      };
+      window.__cprefDPPage = function (name) {
+        state.closed = false;
+        state.page = name || '';
+        scheduleSync();
+      };
+      window.__cprefDPHide = function () {
+        state.closed = true;
+        state.page = '';
+        stopPoll();
+        hidePanel();
+      };
+
+      // Compatibility with the previous floating-panel implementation.
+      window.__cprefOpenDataPool = function () {
+        if (state.section === DP_SECTION) {
+          state.closed = false;
+          scheduleSync();
+        }
+      };
+      window.__cprefCloseDataPool = function () {
+        state.closed = true;
+        state.section = '';
+        stopPoll();
+        hidePanel();
+      };
+
+      window.addEventListener('resize', scheduleSync);
+      window.addEventListener('orientationchange', scheduleSync);
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', scheduleSync);
+      }
     })();
   </script>
   <script src="flutter_bootstrap.js" async></script>

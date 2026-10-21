@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """Adds the "Датапул" tile to the Agent screen right after "Фракции".
 
-The tile opens the existing HTML side panel through window.__cprefOpenDataPool(),
-which is exposed by app/index.html. Idempotent.
+This is the first half of the integration: it adds the tile and hooks its tap
+to window.__cprefOpenDataPool(). Run tools/patch_inline_datapool.py afterwards
+to turn the tile into a normal section (the current app/index.html renders the
+DataPool inline and the follow-up patch replaces that tap hook). Idempotent.
 
 The compiled bundle stores non-ASCII as lowercase \\uXXXX escapes, so all
 Russian literals below go through esc() before searching/inserting.
