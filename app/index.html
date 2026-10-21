@@ -289,6 +289,48 @@
       display: none;
     }
 
+    #dp-toolbar {
+      display: none;
+      flex: 0 0 36px;
+      align-items: center;
+      gap: 8px;
+      padding: 0 8px 0 6px;
+      box-sizing: border-box;
+      background: #140d09;
+      border-bottom: 1px solid #4a2f1d;
+      color: #e0b57a;
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+    }
+
+    #dp-panel.dp-large #dp-toolbar {
+      display: flex;
+    }
+
+    #dp-back {
+      flex: 0 0 auto;
+      height: 28px;
+      padding: 0 8px;
+      border: 1px solid #5a3a22;
+      border-radius: 5px;
+      background: #21150d;
+      color: #e0b57a;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    #dp-back:hover,
+    #dp-back:focus-visible {
+      background: #2b1b10;
+      border-color: #a66a3a;
+      outline: none;
+    }
+
+    #dp-toolbar-title {
+      font-weight: 600;
+      color: #f0d2a4;
+    }
+
     #dp-frame {
       flex: 1;
       width: 100%;
@@ -310,6 +352,10 @@
     </div>
   </div>
   <div id="dp-panel" class="hidden" aria-hidden="true">
+    <div id="dp-toolbar">
+      <button id="dp-back" type="button" title="Назад">← Назад</button>
+      <span id="dp-toolbar-title">ДатаПул</span>
+    </div>
     <iframe id="dp-frame" title="ДатаПул" loading="lazy"></iframe>
   </div>
   <script>
@@ -635,7 +681,7 @@
       var AGENT_PAGE = 'Заметки';
       var NAV_HEIGHT = 86;
 
-      var state = { section: '', page: '', closed: false };
+      var state = { section: '', page: '', closed: false, compact: false };
       var visible = false;
       var frameRequested = false;
       var lastKey = '';
@@ -643,6 +689,43 @@
       var syncTimer = 0;
       var semObserver = null;
       var semClickAt = 0;
+
+      function isMobileLayout() {
+        return window.innerWidth <= 980;
+      }
+
+      function wantsLarge() {
+        return isMobileLayout() && !state.compact;
+      }
+
+      var backButton = document.getElementById('dp-back');
+      if (backButton) {
+        backButton.addEventListener('click', function () {
+          state.compact = true;
+          lastKey = '';
+          scheduleSync();
+        });
+      }
+
+      // The DataPool is a separate document.  For the embedded "large"
+      // layout we hide its native scrollbar so it reads as one page, but
+      // leave wheel/touch scrolling intact.
+      function hideFrameScrollbar() {
+        try {
+          var doc = frame.contentDocument;
+          if (!doc || !doc.documentElement) return;
+          if (doc.getElementById('cpref-embed-scrollbars')) return;
+          var style = doc.createElement('style');
+          style.id = 'cpref-embed-scrollbars';
+          style.textContent =
+            'html,body{scrollbar-width:none;-ms-overflow-style:none}' +
+            'html::-webkit-scrollbar,body::-webkit-scrollbar{' +
+            'width:0!important;height:0!important;display:none!important}';
+          (doc.head || doc.documentElement).appendChild(style);
+        } catch (error) {}
+      }
+
+      frame.addEventListener('load', hideFrameScrollbar);
 
       function semReady() {
         return document.querySelectorAll('flt-semantics').length > 0;
@@ -691,6 +774,7 @@
 
         // The outermost semantics group around the tiles is the scrollable
         // page viewport; its bottom edge is the bottom of the content area.
+        var appTop = null;
         var appBottom = window.innerHeight;
         var node = tile.el.parentElement;
         while (node) {
@@ -699,11 +783,13 @@
             var fullScreen = group.width >= window.innerWidth - 1 &&
                              group.height >= window.innerHeight - 1;
             if (!fullScreen && group.width > 0 && group.height > 0) {
+              appTop = group.top;
               appBottom = group.bottom;
             }
           }
           node = node.parentElement;
         }
+        if (appTop === null) appTop = 0;
 
         var top = tile.rect.bottom + 12;
         var left = title.rect.left;
@@ -711,7 +797,14 @@
         var bottom = Math.min(appBottom, window.innerHeight);
         if (top < 0) top = 0;
         if (width < 80 || bottom - top < 24) return null;
-        return { left: left, top: top, width: width, height: bottom - top };
+        return {
+          left: left,
+          top: top,
+          width: width,
+          height: bottom - top,
+          appTop: appTop,
+          bottom: bottom
+        };
       }
 
       // Geometric fallback used for the first frames before the semantics
@@ -740,8 +833,16 @@
 
         var top = gridTop + gridHeight + 12;
         var bottom = wide ? height : height - NAV_HEIGHT;
+        var contentTop = wide ? 0 : 103;
         if (contentWidth < 80 || bottom - top < 24) return null;
-        return { left: left, top: top, width: contentWidth, height: bottom - top };
+        return {
+          left: left,
+          top: top,
+          width: contentWidth,
+          height: bottom - top,
+          appTop: contentTop,
+          bottom: bottom
+        };
       }
 
       function isWanted() {
@@ -760,6 +861,7 @@
           hidePanel();
           return;
         }
+        panel.classList.toggle('dp-large', wantsLarge());
         var key = Math.round(rect.left) + ',' + Math.round(rect.top) + ',' +
                   Math.round(rect.width) + ',' + Math.round(rect.height);
         if (key !== lastKey) {
@@ -815,7 +917,29 @@
           startPoll();
           return;
         }
-        applyRect(measureFromSemantics() || fallbackRect());
+        var layout = measureFromSemantics() || fallbackRect();
+        if (!layout) {
+          hidePanel();
+          return;
+        }
+        var rect = layout;
+        if (wantsLarge()) {
+          var largeTop = layout.appTop == null ? layout.top : layout.appTop;
+          var largeBottom = layout.bottom == null
+            ? layout.top + layout.height
+            : layout.bottom;
+          rect = {
+            left: layout.left,
+            top: largeTop,
+            width: layout.width,
+            height: largeBottom - largeTop
+          };
+        }
+        if (rect.width < 80 || rect.height < 24) {
+          hidePanel();
+          return;
+        }
+        applyRect(rect);
       }
 
       function scheduleSync() {
@@ -839,6 +963,7 @@
       // Hooks called from the patched Flutter bundle (app/main.dart.js).
       window.__cprefDPSection = function (name) {
         state.closed = false;
+        state.compact = false;
         state.section = name || '';
         scheduleSync();
       };
