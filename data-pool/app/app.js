@@ -194,3 +194,197 @@ window.initPageScripts = async function () {
 document.addEventListener("DOMContentLoaded", () => {
     initPageScripts();
 });
+
+/* ============================================================
+   Мобильная версия Data Pool.
+   Общий скрипт сайта: создаёт кнопку-гамбургер, боковое
+   меню-шторку, а также оборачивает таблицы в прокручиваемые
+   контейнеры.  Идемпотентен: повторный запуск ничего не ломает.
+   ============================================================ */
+(function () {
+    "use strict";
+
+    if (window.__dpMobileInstalled) return;
+    window.__dpMobileInstalled = true;
+
+    const mobileQuery = window.matchMedia("(max-width: 980px)");
+    let setMenuOpen = null;
+
+    function installMenu() {
+        const header = document.querySelector(".site-header");
+        const sidebar = document.querySelector(".sidebar");
+        if (!header && !sidebar) return;
+
+        let button = document.querySelector(".dp-menu-button");
+        if (!button && header) {
+            button = document.createElement("button");
+            button.type = "button";
+            button.className = "dp-menu-button";
+            button.setAttribute("aria-label", "Открыть меню");
+            button.setAttribute("aria-expanded", "false");
+            if (sidebar) {
+                button.setAttribute("aria-controls", sidebar.id || "sidebar");
+            }
+            button.innerHTML = "&#9776;";
+            header.insertBefore(button, header.firstChild);
+        }
+
+        let closeButton = document.querySelector(".dp-menu-close");
+        if (!closeButton && sidebar) {
+            closeButton = document.createElement("button");
+            closeButton.type = "button";
+            closeButton.className = "dp-menu-close";
+            closeButton.setAttribute("aria-label", "Закрыть меню");
+            closeButton.innerHTML = "&times;";
+            sidebar.insertBefore(closeButton, sidebar.firstChild);
+        }
+
+        let backdrop = document.querySelector(".dp-menu-backdrop");
+        if (!backdrop) {
+            backdrop = document.createElement("div");
+            backdrop.className = "dp-menu-backdrop";
+            backdrop.setAttribute("aria-hidden", "true");
+            document.body.appendChild(backdrop);
+        }
+
+        setMenuOpen = function (open) {
+            document.documentElement.classList.toggle("dp-menu-open", open);
+            document.body.classList.toggle("dp-menu-open", open);
+            if (button) {
+                button.setAttribute("aria-expanded", open ? "true" : "false");
+            }
+        };
+
+        if (button) {
+            button.addEventListener("click", () => {
+                if (!mobileQuery.matches) return;
+                setMenuOpen(!document.body.classList.contains("dp-menu-open"));
+            });
+        }
+        if (closeButton) {
+            closeButton.addEventListener("click", () => setMenuOpen(false));
+        }
+        if (backdrop) {
+            backdrop.addEventListener("click", () => setMenuOpen(false));
+        }
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" || event.key === "Esc") setMenuOpen(false);
+        });
+        if (sidebar) {
+            sidebar.addEventListener("click", (event) => {
+                const link = event.target && event.target.closest
+                    ? event.target.closest("a")
+                    : null;
+                if (link) setMenuOpen(false);
+            });
+        }
+
+        const handleViewportChange = () => {
+            if (!mobileQuery.matches) setMenuOpen(false);
+        };
+        window.addEventListener("resize", handleViewportChange);
+        if (mobileQuery.addEventListener) {
+            mobileQuery.addEventListener("change", handleViewportChange);
+        } else if (mobileQuery.addListener) {
+            mobileQuery.addListener(handleViewportChange);
+        }
+
+        syncSpecialMode();
+    }
+
+    // В режимах «Ширма Мастера» / «Противники» прячем гамбургер и поиск:
+    // навигация там всё равно недоступна (сайдбар скрыт самим сайтом).
+    function syncSpecialMode() {
+        const gmScreen = document.getElementById("gm-screen-mode");
+        const enemies = document.getElementById("enemies-mode");
+        const special = !!(gmScreen && gmScreen.classList.contains("active")) ||
+            !!(enemies && enemies.classList.contains("active"));
+        document.body.classList.toggle("dp-special-mode", special);
+        if (special && setMenuOpen) setMenuOpen(false);
+    }
+
+    function watchModes() {
+        [document.getElementById("gm-screen-mode"), document.getElementById("enemies-mode")]
+            .forEach((mode) => {
+                if (!mode) return;
+                new MutationObserver(syncSpecialMode).observe(mode, {
+                    attributes: true,
+                    attributeFilter: ["class", "style"]
+                });
+            });
+    }
+
+    function countColumns(table) {
+        const row = table.tHead && table.tHead.rows[0]
+            ? table.tHead.rows[0]
+            : table.rows[0];
+        if (!row) return 0;
+        let columns = 0;
+        for (let i = 0; i < row.cells.length; i += 1) {
+            columns += row.cells[i].colSpan || 1;
+        }
+        return columns;
+    }
+
+    // Широкие таблицы на телефоне прокручиваются горизонтально,
+    // остальные просто сжимаются по ширине экрана.
+    function wrapTables() {
+        const tables = document.querySelectorAll("table");
+        for (let i = 0; i < tables.length; i += 1) {
+            const table = tables[i];
+            if (table.closest(".table-scroll")) continue;
+            if (table.closest(".sidebar") || table.closest(".toc-popup")) continue;
+            const wrapper = document.createElement("div");
+            wrapper.className = countColumns(table) >= 4
+                ? "table-scroll table-scroll-wide"
+                : "table-scroll";
+            table.parentNode.insertBefore(wrapper, table);
+            wrapper.appendChild(table);
+        }
+    }
+
+    let wrapScheduled = false;
+    function scheduleWrapTables() {
+        if (wrapScheduled) return;
+        wrapScheduled = true;
+        window.setTimeout(() => {
+            wrapScheduled = false;
+            wrapTables();
+        }, 60);
+    }
+
+    function watchContent() {
+        ["main-content", "gm-screen-content", "enemy-details"].forEach((id) => {
+            const container = document.getElementById(id);
+            if (!container) return;
+            new MutationObserver(scheduleWrapTables).observe(container, {
+                childList: true,
+                subtree: true
+            });
+        });
+    }
+
+    // spa.js перезаписывает #main-content и вызывает initPageScripts —
+    // после каждого перехода оборачиваем новые таблицы.
+    const originalInit = window.initPageScripts;
+    if (typeof originalInit === "function") {
+        window.initPageScripts = function () {
+            const result = originalInit.apply(this, arguments);
+            scheduleWrapTables();
+            return result;
+        };
+    }
+
+    function init() {
+        installMenu();
+        watchModes();
+        watchContent();
+        wrapTables();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", init);
+    } else {
+        init();
+    }
+})();

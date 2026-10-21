@@ -1,0 +1,553 @@
+/* ============================================================
+   Мобильная / компактная версия Data Pool.
+
+   Подключается последней в main.css.  На узких экранах (телефон
+   и область ДатаПула внутри приложения) превращает десктопную
+   раскладку в одноколоночную: компактная липкая шапка, боковое
+   меню-шторка, поиск во всю ширину, прокручиваемые таблицы.
+
+   Десктопная версия (шире 980px) сохраняет прежнюю раскладку;
+   дополнительно широкие таблицы прокручиваются внутри контента,
+   не сжимая боковое меню.
+   ============================================================ */
+
+/* Служебные элементы мобильного меню по умолчанию скрыты */
+.dp-menu-button,
+.dp-menu-close,
+.dp-menu-backdrop {
+    display: none;
+}
+
+/* Десктопная устойчивость: исходная flex-раскладка сжимала
+   боковое меню, если таблица была шире контентной колонки.
+   Теперь широкая таблица прокручивается внутри контента. */
+.layout > .sidebar {
+    flex: 0 0 250px;
+}
+
+.layout > .content {
+    min-width: 0;
+}
+
+.table-scroll,
+pre,
+.terminal-links {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 980px) {
+    html, body {
+        max-width: 100%;
+    }
+
+    /* clip, а не hidden: hidden на body создаёт scroll-контейнер
+       и ломает position:sticky у шапки. */
+    body {
+        overflow-x: clip;
+        -webkit-text-size-adjust: 100%;
+    }
+
+    img, iframe, video {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* ---------- Шапка: компактная липкая панель ---------- */
+    .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 2000;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        height: auto;
+        min-height: 0;
+        padding: 6px 8px;
+        background: #140D07;
+        border-bottom: 2px solid #CE8B45;
+        overflow: visible;
+        box-sizing: border-box;
+    }
+
+    .site-header > img {
+        display: none;
+    }
+
+    .dp-menu-button {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: 2px solid #CE8B45;
+        border-radius: 9px;
+        background: #211710;
+        color: #FBF3E6;
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .dp-menu-button:active {
+        background: #CE8B45;
+        color: #140D07;
+    }
+
+    .page-tabs {
+        position: static;
+        flex: 1 1 auto;
+        min-width: 0;
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 1px 0;
+        scrollbar-width: none;
+    }
+
+    .page-tabs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .page-tab-item {
+        flex: 0 0 auto;
+        padding: 6px 10px;
+        border: 1px solid #CE8B45;
+        border-radius: 9px;
+        background: #211710;
+        color: #EFE3D0;
+        font-size: 0.78rem;
+        white-space: nowrap;
+    }
+
+    .page-tab-item.active {
+        background: #CE8B45;
+        color: #140D07;
+    }
+
+    /* ---------- Поиск: обычный блок под шапкой ---------- */
+    .search-box {
+        position: static;
+        width: auto;
+        margin: 0;
+        padding: 7px 8px;
+        background: #140D07;
+        border-bottom: 1px solid #3C312C;
+        box-sizing: border-box;
+    }
+
+    #search-input {
+        width: 100%;
+        padding: 9px 10px;
+        font-size: 16px;
+        box-sizing: border-box;
+    }
+
+    #search-results {
+        max-height: 45vh;
+    }
+
+    /* ---------- Раскладка: одна колонка ---------- */
+    .layout {
+        display: block;
+        min-height: 0;
+    }
+
+    .content {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        padding: 14px 12px 30px;
+        box-sizing: border-box;
+        overflow-wrap: break-word;
+    }
+
+    h1,
+    .content h1,
+    h1.version-title {
+        font-size: 1.45rem;
+        margin: 0.25rem 0 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .content h2 {
+        font-size: 1.25rem;
+    }
+
+    .content h3 {
+        font-size: 1.1rem;
+    }
+
+    /* ---------- Боковое меню-шторка ---------- */
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 340px;
+        max-width: 86vw;
+        height: 100%;
+        max-height: none;
+        z-index: 4000;
+        padding: 0.9em 0.8em;
+        border-right: 2px solid #CE8B45;
+        border-bottom: 0;
+        background: #140D07;
+        box-sizing: border-box;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        transform: translateX(-105%);
+        transition: transform 0.25s ease;
+        box-shadow: 6px 0 24px rgba(0, 0, 0, 0.65);
+    }
+
+    html.dp-menu-open,
+    body.dp-menu-open {
+        overflow: hidden;
+    }
+
+    body.dp-menu-open .sidebar {
+        transform: translateX(0);
+    }
+
+    .dp-menu-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        z-index: 10;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: 2px solid #CE8B45;
+        border-radius: 9px;
+        background: #211710;
+        color: #FBF3E6;
+        font-size: 22px;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .dp-menu-backdrop {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 3500;
+        display: block;
+        background: rgba(0, 0, 0, 0.6);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+    }
+
+    body.dp-menu-open .dp-menu-backdrop {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    /* В режимах «Ширма Мастера» / «Противники» меню и поиск не нужны */
+    body.dp-special-mode .dp-menu-button,
+    body.dp-special-mode .search-box {
+        display: none;
+    }
+
+    /* ---------- Контент: сетки, карточки, футер ---------- */
+    .tile-grid {
+        grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+        gap: 0.7rem;
+        margin: 1.25rem auto;
+        padding: 0;
+    }
+
+    .tile-button {
+        height: 88px;
+        padding: 0.6rem;
+    }
+
+    .tile-button span {
+        font-size: 0.92rem;
+    }
+
+    .tab-buttons {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .tab-button {
+        flex: 0 1 auto;
+        max-width: 100%;
+        white-space: normal;
+        text-align: center;
+    }
+
+    .version-log {
+        margin: 2rem auto;
+        padding: 0;
+    }
+
+    .version-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .image-container {
+        flex-wrap: wrap;
+        gap: 0.75em;
+        margin: 1.25em 0;
+    }
+
+    .image-container img,
+    .image-container .text {
+        max-width: 100%;
+    }
+
+    .image-container.image-left,
+    .image-container.image-right {
+        flex-direction: column;
+    }
+
+    .custom-footer {
+        font-size: 0.95rem;
+    }
+
+    .footer-title {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .footer-content {
+        gap: 1.25rem;
+    }
+
+    .footer-column {
+        flex: 1 1 100%;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .footer-note {
+        text-align: center;
+    }
+
+    /* ---------- Таблицы ---------- */
+    .table-scroll {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        margin: 1.25em 0;
+    }
+
+    .table-scroll > table {
+        margin: 0;
+    }
+
+    .table-scroll-wide > table {
+        min-width: 560px;
+    }
+
+    th, td {
+        padding: 0.4em 0.5em;
+    }
+
+    pre,
+    .terminal-links,
+    .terminal-block {
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* ---------- Ширма Мастера ---------- */
+    #gm-screen-mode {
+        min-height: 0;
+        padding: 0.5rem;
+        box-sizing: border-box;
+    }
+
+    #gm-screen-content {
+        max-width: 100%;
+        padding: 0.9rem;
+        box-sizing: border-box;
+    }
+
+    #screen-panel-content {
+        padding: 0.9rem;
+    }
+
+    .gm-screen-container {
+        padding: 0.5rem;
+    }
+
+    .gm-screen-nav {
+        flex-wrap: wrap;
+        gap: 0.5rem 0.75rem;
+    }
+
+    #gm-screen-page {
+        width: 100%;
+        height: auto;
+    }
+
+    /* ---------- Противники ---------- */
+    #enemies-mode {
+        min-height: 0;
+        padding: 0.5rem;
+        box-sizing: border-box;
+    }
+
+    .enemies-root {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        height: auto;
+    }
+
+    .enemies-sidebar {
+        grid-row: auto;
+    }
+
+    #enemy-tier-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    .enemy-tier-btn {
+        flex: 1 1 auto;
+        text-align: center;
+    }
+
+    #enemy-type-buttons {
+        grid-column: auto;
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        padding: 0;
+    }
+
+    #enemy-details {
+        grid-column: auto;
+        width: 100%;
+    }
+
+    .enemy-layout,
+    .enemy-main {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .stats-column {
+        flex: 1 1 auto;
+        width: 100%;
+    }
+
+    .silhouette-box {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .silhouette-wrapper {
+        width: 100%;
+        max-width: 100%;
+        height: 480px;
+    }
+
+    .silhouette-img {
+        transform: scale(1.45);
+    }
+
+    .enemy-primary-stats {
+        flex-wrap: wrap;
+    }
+
+    .inventory-grid {
+        max-width: 100%;
+    }
+
+    /* ---------- Кнопки «Наверх» и «Оглавление» ---------- */
+    #scrollToTopBtn,
+    .toc-button {
+        right: 12px;
+        width: 44px;
+        height: 44px;
+    }
+
+    #scrollToTopBtn {
+        bottom: 12px;
+    }
+
+    .toc-button {
+        bottom: 64px;
+        line-height: 42px;
+    }
+
+    .toc-popup {
+        right: 12px;
+        bottom: 118px;
+        max-width: calc(100vw - 24px);
+    }
+}
+
+/* Очень узкие телефоны (320–380 px): чуть компактнее шапка,
+   чтобы все три вкладки помещались без прокрутки. */
+@media (max-width: 380px) {
+    .site-header {
+        gap: 4px;
+        padding: 5px 6px;
+    }
+
+    .dp-menu-button {
+        width: 34px;
+        height: 34px;
+        font-size: 18px;
+    }
+
+    .page-tabs {
+        gap: 5px;
+    }
+
+    .page-tab-item {
+        padding: 5px 7px;
+        font-size: 0.72rem;
+    }
+
+    .dp-menu-close {
+        top: 8px;
+        right: 8px;
+        width: 34px;
+        height: 34px;
+        font-size: 20px;
+    }
+
+    .search-box {
+        padding: 6px;
+    }
+
+    #search-input {
+        padding: 8px;
+    }
+
+    .tile-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 0.55rem;
+    }
+
+    .tile-button {
+        height: 84px;
+    }
+
+    .tile-button span {
+        font-size: 0.85rem;
+    }
+}
