@@ -276,31 +276,6 @@
     }
 
     /* ---- Dark-brown additions: Data Pool integration ---- */
-    #dp-fab {
-      position: fixed;
-      right: 16px;
-      bottom: 16px;
-      z-index: 9000;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: #2f2016;
-      color: #e8b87b;
-      border: 1.5px solid #c68b49;
-      border-radius: 10px;
-      padding: 10px 14px;
-      font: 700 13px/1 system-ui, Arial, sans-serif;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      cursor: pointer;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, .55);
-    }
-
-    #dp-fab:hover {
-      background: #3e2b1d;
-      color: #f2e5d0;
-    }
-
     #dp-panel {
       position: fixed;
       inset: 0 0 0 auto;
@@ -405,9 +380,6 @@
       </div>
     </div>
   </div>
-  <button id="dp-fab" title="ДатаПул — справочник по Cyberpunk RED">
-    <span aria-hidden="true">📚</span> ДатаПул
-  </button>
   <div id="dp-panel" class="hidden" aria-hidden="true">
     <div id="dp-panel-head">
       <div id="dp-panel-title">ДатаПул — база знаний Cyberpunk RED</div>
@@ -748,7 +720,6 @@
   -->
   <script>
     (function () {
-      var fab = document.getElementById('dp-fab');
       var panel = document.getElementById('dp-panel');
       var frame = document.getElementById('dp-frame');
       var closeBtn = document.getElementById('dp-panel-close');
@@ -784,13 +755,8 @@
         panel.setAttribute('aria-hidden', 'true');
       }
 
-      fab.addEventListener('click', function () {
-        if (initialized && !panel.classList.contains('hidden')) {
-          closePanel();
-        } else {
-          openPanel();
-        }
-      });
+      window.__cprefOpenDataPool = function () { openPanel(); };
+      window.__cprefCloseDataPool = closePanel;
       closeBtn.addEventListener('click', closePanel);
       panel.querySelectorAll('[data-dp]').forEach(function (link) {
         link.addEventListener('click', function (ev) {
